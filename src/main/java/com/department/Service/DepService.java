@@ -95,7 +95,7 @@ public class DepService {
     public EmployeeResponseDto updateEmployee(ModEmployee modEmployee,int id){
 
         Employee employee = userRepo.findById(id)
-                .orElseThrow(()-> new RuntimeException("Employee not found"))
+                .orElseThrow(()-> new RuntimeException("Employee not found"));
 
                 Department dep = depRepo.findById(modEmployee.getId())
                         .orElseThrow(()-> new RuntimeException("Department not found"));
