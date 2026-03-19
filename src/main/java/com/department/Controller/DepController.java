@@ -45,13 +45,15 @@ public class DepController {
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public ResponseEntity<EmployeeResponseDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
 
-        return depService.addEmployee(employeeDto);
+        return new ResponseEntity<>(depService.addEmployee(employeeDto), HttpStatus.OK);
     }
 
     @PutMapping("/employees/{id}/transfer")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody ModEmployee modEmployee, @PathVariable Long id) {
-        return depService.updateEmployee(modEmployee);
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody ModEmployee modEmployee, @PathVariable int id) {
+        return new ResponseEntity<>(depService.updateEmployee(modEmployee,id), HttpStatus.OK);
+
+
     }
 
 

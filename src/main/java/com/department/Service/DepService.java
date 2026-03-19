@@ -1,13 +1,13 @@
 package com.department.Service;
 
-import com.department.Dto.BudgetResponseDto;
-import com.department.Dto.DepResponseDto;
-import com.department.Dto.DepartmentDto;
+import com.department.Dto.*;
 import com.department.Entity.Department;
 import com.department.Entity.Employee;
 import com.department.Repository.DepRepo;
+import com.department.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +18,9 @@ public class DepService {
 
     @Autowired
     DepRepo depRepo;
+
+    @Autowired
+    UserRepo userRepo;
 
     public DepResponseDto addDepartment(DepartmentDto departmentDto){
         Department dep = new Department();
@@ -70,6 +73,36 @@ public class DepService {
         return new BudgetResponseDto(department.getDepartmentName(), utilizedBudget,remBudget);
 
 
+    }
+
+    public EmployeeResponseDto addEmployee(EmployeeDto employeeDto){
+
+        Employee employee = new Employee();
+        employee.setName(employeeDto.getName());
+        employee.setEmail(employeeDto.getEmail());
+        employee.setName(employeeDto.getName());
+        employee.setJoinDate(employeeDto.getJoinDate());
+        employee.setSalary(employeeDto.getSalary());
+        employee.setRole(Employee.Role.EMPLOYEE);
+        Department department = depRepo.findById(employeeDto.getDepartmentId())
+                .orElseThrow(()-> new RuntimeException("Department not Found"));
+        employee.setDepartment(department);
+        userRepo.save(employee);
+        return new EmployeeResponseDto((long)employee.getId(),employee.getEmail(),employee.getName(),employee.getSalary(),employee.getJoinDate());
+    }
+
+
+    public EmployeeResponseDto updateEmployee(ModEmployee modEmployee,int id){
+
+        Employee employee = userRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("Employee not found"))
+
+                Department dep = depRepo.findById(modEmployee.getId())
+                        .orElseThrow(()-> new RuntimeException("Department not found"));
+
+        employee.setDepartment(dep);
+        userRepo.save(employee);
+        return new EmployeeResponseDto((long)employee.getId(),employee.getEmail(),employee.getName(),employee.getSalary(),employee.getJoinDate());
 
     }
 
