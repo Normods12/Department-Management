@@ -25,7 +25,7 @@ public class DepController {
         log.info("Received request to add department : {}",departmentDto.getDepartmentName());
         DepResponseDto dto  = depService.addDepartment(departmentDto);
         log.info("Added department successfully : {}",dto.getDepartmentName());
-        return new ResponseEntity<>(dto, HttpStatus.OK) ;
+        return new ResponseEntity<>(dto, HttpStatus.CREATED) ;
 
     }
 
@@ -57,7 +57,7 @@ public class DepController {
         log.info("Received request to add Employee: {}",employeeDto.getEmail());
         EmployeeResponseDto emp =  depService.addEmployee(employeeDto);
         log.info("Added Employee successfully : {}",emp.getEmail());
-        return new ResponseEntity<>(emp, HttpStatus.OK);
+        return new ResponseEntity<>(emp, HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{id}/transfer")

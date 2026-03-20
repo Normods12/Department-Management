@@ -7,6 +7,8 @@ import com.department.Exception.DuplicateResourceException;
 import com.department.Exception.ResourceNotFoundException;
 import com.department.Repository.DepRepo;
 import com.department.Repository.UserRepo;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,8 @@ public class DepService {
     @Autowired
     UserRepo userRepo;
 
-    public DepResponseDto addDepartment(DepartmentDto departmentDto){
+    @Transactional
+    public DepResponseDto addDepartment(@Valid DepartmentDto departmentDto){
         log.debug("Checking if department exists : {}",departmentDto.getDepartmentName());
         if(depRepo.existsByDepartmentCode(departmentDto.getDepartmentCode())){
             log.warn("Department already exists");
@@ -47,7 +50,7 @@ public class DepService {
 
     public List<DepResponseDto> displayDepartments(){
         log.debug("Checking if departments exists");
-        List<Department> departments = depRepo.findAll();
+        List<Department> departments = depRepo.findAllWithEmployees();
         if(departments.isEmpty()){
             log.warn("Departments not found");
         }
@@ -66,6 +69,7 @@ public class DepService {
 
         return  deps;
     }
+
 
     public BudgetResponseDto displayBudgetUtilization(Long id){
         log.debug("Checking if the department exists : {}",id);
@@ -90,7 +94,8 @@ public class DepService {
 
     }
 
-    public EmployeeResponseDto addEmployee(EmployeeDto employeeDto){
+    @Transactional
+    public EmployeeResponseDto addEmployee(@Valid EmployeeDto employeeDto){
 
         log.debug("Checking if Employee exists : {}",employeeDto.getEmail());
         if(userRepo.existsByEmail(employeeDto.getEmail())) {
@@ -114,7 +119,8 @@ public class DepService {
     }
 
 
-    public EmployeeResponseDto updateEmployee(ModEmployee modEmployee,int id){
+    @Transactional
+    public EmployeeResponseDto updateEmployee(@Valid ModEmployee modEmployee,int id){
 
         log.debug("Checking if Employee exists : {}",id);
         Employee employee = userRepo.findById(id)
