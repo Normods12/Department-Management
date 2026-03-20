@@ -1,6 +1,7 @@
 package com.department.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -39,6 +40,7 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department;
 
     public Employee(int id, String email, String password, String name, Role role, Double salary, LocalDate joinDate, Department department) {

@@ -22,21 +22,30 @@ public class DepController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DepResponseDto> addDepartment(@RequestBody DepartmentDto  departmentDto) {
 
-        return new ResponseEntity<>(depService.addDepartment(departmentDto), HttpStatus.OK) ;
+        log.info("Received request to add department : {}",departmentDto.getDepartmentName());
+        DepResponseDto dto  = depService.addDepartment(departmentDto);
+        log.info("Added department successfully : {}",dto.getDepartmentName());
+        return new ResponseEntity<>(dto, HttpStatus.OK) ;
 
     }
 
     @GetMapping("/departments")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DepResponseDto>> displayDepartments() {
-
-        return new ResponseEntity<>(depService.displayDepartments(), HttpStatus.OK) ;
+        log.info("Fetching List of Departments");
+        List<DepResponseDto> list = depService.displayDepartments();
+        log.info("List of Departments successfully, No of Departments : {}",list.toArray().length);
+        return new ResponseEntity<>(list, HttpStatus.OK) ;
     }
 
     @GetMapping("/departments/{id}/budget-utilization")
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public ResponseEntity<BudgetResponseDto> displayBudgetUtilization(@PathVariable Long id) {
-        return new ResponseEntity<>(depService.displayBudgetUtilization(id), HttpStatus.OK) ;
+
+        log.info("Received request to display budget utilization of {}",id);
+        BudgetResponseDto budgetResponseDto = depService.displayBudgetUtilization(id);
+        log.info("Budget Utilization was fetched for department : {}",budgetResponseDto.getDeptName());
+        return new ResponseEntity<>(budgetResponseDto, HttpStatus.OK) ;
 
 
     }
@@ -45,13 +54,20 @@ public class DepController {
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public ResponseEntity<EmployeeResponseDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
 
-        return new ResponseEntity<>(depService.addEmployee(employeeDto), HttpStatus.OK);
+        log.info("Received request to add Employee: {}",employeeDto.getEmail());
+        EmployeeResponseDto emp =  depService.addEmployee(employeeDto);
+        log.info("Added Employee successfully : {}",emp.getEmail());
+        return new ResponseEntity<>(emp, HttpStatus.OK);
     }
 
     @PutMapping("/employees/{id}/transfer")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody ModEmployee modEmployee, @PathVariable int id) {
-        return new ResponseEntity<>(depService.updateEmployee(modEmployee,id), HttpStatus.OK);
+
+       log.info("Received request to transfer Employee: {}",id);
+       EmployeeResponseDto emp =  depService.updateEmployee(modEmployee,id);
+       log.info("Updated Employee successfully : {}",emp.getEmail());
+        return new ResponseEntity<>(emp, HttpStatus.OK);
 
 
     }
