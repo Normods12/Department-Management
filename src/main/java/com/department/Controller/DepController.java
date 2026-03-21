@@ -72,5 +72,11 @@ public class DepController {
 
     }
 
+    @GetMapping("/about-project")
+    public ResponseEntity<String> aboutProject(){
+        String a = "This project is for Managing departments";
+        return new ResponseEntity<>(a,HttpStatus.OK);
+    }
+
 
 }
